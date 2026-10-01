@@ -1,0 +1,55 @@
+package week8_assignment;
+
+import java.util.*;
+
+abstract class Room {
+    int units;
+    Room(int units) { this.units = units; }
+    abstract double calculateBill();
+}
+
+class SingleRoom extends Room {
+    SingleRoom(int units) { super(units); }
+    double calculateBill() { return units * 8; }
+}
+
+class SharedRoom extends Room {
+    int occupants;
+    SharedRoom(int units, int occupants) { super(units); this.occupants = occupants; }
+    double calculateBill() { return (units * 6.0) / occupants; }
+}
+
+class AcRoom extends Room {
+    AcRoom(int units) { super(units); }
+    double calculateBill() { return units * 10 + 200; }
+}
+
+public class HostelBill {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int N = sc.nextInt();
+        double total = 0;
+
+        for (int i = 0; i < N; i++) {
+            String type = sc.next();
+            Room r = null;
+
+            if (type.equals("SINGLE")) {
+                int units = sc.nextInt();
+                r = new SingleRoom(units);
+            } else if (type.equals("SHARED")) {
+                int units = sc.nextInt();
+                int occ = sc.nextInt();
+                r = new SharedRoom(units, occ);
+            } else if (type.equals("AC")) {
+                int units = sc.nextInt();
+                r = new AcRoom(units);
+            }
+
+            double bill = r.calculateBill();
+            System.out.printf("%s: %.2f%n", type, bill);
+            total += bill;
+        }
+        System.out.printf("Total: %.2f%n", total);
+    }
+}
